@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <title>Home</title>
+    <title>Preço por likes</title>
     <style>
         * {
     margin: 0;
@@ -66,23 +66,31 @@ button:hover {
     </style>
 </head>
 <body>
-    <form id="id-musica">
-        <%- include('partials/header') %>
-        <h1>Bem vinda à página inicial</h1>
-        <p>Esta é pagina inicial da aplicação PSIFY.</p>
-        <P>Utilize o menu acima para navegar pelas diferentes funcionalidades da aplicação.</P>
-        <p>Obter uma música: </p>
-        <p>ID da música: <input type="number" id="id" name="id">
-        <button type="submit" onclick="redirecionar()">Buscar</button></p>
+    <%- include('partials/header') %>
+
+    <h1>Editar preço por likes: </h1>
+    <form id="form-price">
+        <label>Preço por like: </label>
+        <input type="number" name="price" id="price" value="<%= price %>">
+        <button type="submit">Atualizar</button>
     </form>
 
     <script>
+        document.getElementById('form-price').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const novoPreco = Object.fromEntries(formData.entries());
 
-        function redirecionar() {
-            const red = "/songs/" + document.getElementById('id').value;
-            window.location.href = red
-        }
-
+            axios.put('/price', novoPreco)
+            .then(response => {
+                console.log('Success:', response.data);
+                alert("Preço atualizado com sucesso!")
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
     </script>
 </body>
 </html>

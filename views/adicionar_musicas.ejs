@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Adicionar música</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    margin-top: 5%;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+form {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+input {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button {
+    background: #1db954;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #1aa34a;
+}
+
+    </style>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <h1>Criar nova música</h1>
+    <form id="form-musicas">
+        <label>Título </label>
+        <input type="text" name="title" id="title">
+        <br><br>
+        <label>Artista </label>
+        <input type="text" name="artist" id="artist">
+        <br><br>
+        <label>Genero </label>
+        <input type="text" name="genre" id="genre">
+        <br><br>
+        <label>Album </label>
+        <input type="text" name="album" id="album">
+        <br><br>
+        <label>Duração </label>
+        <input type="number" name="duration_seconds" id="duration_seconds">
+        <br><br>
+        <label>Data de lançamento </label>
+        <input type="date" name="release_date" id="release_date">
+        <br><br>
+        <label>Nº de Likes </label>
+        <input type="number" name="likes" id="likes">
+        <br><br>
+        <label>Link do Spotify </label>
+        <input type="text" name="spotify_link" id="spotify_link">
+        <br><br>
+        <button type="submit" >Criar</button>
+    </form>
+
+    <script>
+    document.getElementById('form-musicas').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const musicas = Object.fromEntries(formData.entries());
+
+        axios.post('/new-song', musicas) 
+        .then(response => {
+            console.log('Música adicionada:', response.data);
+            console.log('Música:', response.data.spotify_link);
+            alert("Música adicionada com sucesso")
+            location.reload();
+        })
+        .catch(error => {
+            alert("Não foi possível adicionar a música")
+            console.error('Erro ao adicionar a música:', error);
+        });
+    })
+    </script>
+</body>
+</html>

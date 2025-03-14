@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Lista de Músicas</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    margin-top: 5%;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+form {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+input {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button {
+    background: #1db954;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #1aa34a;
+}
+
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+table th, table td {
+    padding: 15px;
+    border: 1px solid #333;
+    text-align: center;
+}
+
+table th {
+    background: #1db954;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background: #2a2a2a;
+}
+
+
+    </style>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <h1>Listagem de músicas disponíveis:</h1>
+    <% if (1>song.length){ %>
+        <h2>Não existem músicas disponíveis</h2>
+    <% } else { %>    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Artista</th>
+                <th>Género</th>
+                <th>Álbum</th>
+                <th>Duração</th>
+                <th>Data de Lançamento</th>
+                <th>Nº de Likes</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% for(let i = 0; i < song.length; i++) { %>
+                <tr>
+                    <td><%= song[i].title %></td>
+                    <td><%= song[i].artist %></td>
+                    <td><%= song[i].genre %></td>
+                    <td><%= song[i].album %></td>
+                    <td><%= song[i].duration_seconds %></td>
+                    <td><%= new Date(song[i].release_date).toISOString().split('T')[0] %></td>
+                    <td><%= song[i].likes %></td>
+                    <td><button type="submit" onclick="deleteSong('<%= song[i].id %>')">Eliminar</button></td>
+                    <td><button type="submit" onclick="editSong('<%= song[i].id %>')">Editar</button></td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <% } %>
+    <script>
+        function deleteSong(id) {
+        if (confirm('Tem certeza que deseja deletar esta música?')) {
+            axios.delete('/songs/' + id)
+            .then(response => {
+                console.log('Música deletada:', response.data);
+                alert('Música removida com sucesso');
+                location.reload();
+            })
+            .catch(error => {
+                alert('Erro ao deletar a música')
+                console.error('Erro ao deletar a música:', error);
+            });
+        }
+    }
+    function editSong(id) {
+        event.preventDefault();
+        window.location.href = `http://localhost:3000/songs/${id}`;
+    }
+    </script>
+</body>
+</html>
