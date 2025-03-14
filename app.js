@@ -2,7 +2,7 @@ const express =require('express')
 const mysql =require('mysql2')
 const axios =require('axios')
 const app = express()
-const port = 3000
+const port = 21122
 const NOME_TABELA = "songs"
 
 app.use(express.json());
@@ -10,9 +10,9 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
+  host: 'vh-jalin-rabey.c.aivencloud.com',
+  user: 'avnadmin',
+  password: 'AVNS_GJQu1pmuO6-U2A-u8Ir',
   database: 'create_songs'
 })
 
